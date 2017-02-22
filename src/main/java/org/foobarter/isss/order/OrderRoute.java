@@ -1,18 +1,19 @@
 package org.foobarter.isss.order;
 
+import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.processor.idempotent.MemoryIdempotentRepository;
-import org.apache.camel.spring.boot.FatJarRouter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class OrderRoute extends FatJarRouter {
+public class OrderRoute extends RouteBuilder {
 
 	// must have a main method spring-boot can run
 	public static void main(String[] args) {
-		FatJarRouter.main(args);
+		SpringApplication.run(OrderRoute.class, args);
 	}
 
 	@Autowired
