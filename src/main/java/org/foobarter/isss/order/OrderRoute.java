@@ -5,6 +5,7 @@ import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.processor.idempotent.MemoryIdempotentRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -16,12 +17,17 @@ public class OrderRoute extends RouteBuilder {
 		SpringApplication.run(OrderRoute.class, args);
 	}
 
+	@Value("${rest.host}")
+	private String host;
+	@Value("${rest.port}")
+	private int port;
+
 	@Autowired
 	private OrderProcessor orderProcessor;
 
     @Override
     public void configure() throws Exception {
-		restConfiguration().component("netty4-http").host("0.0.0.0").port(8080).bindingMode(RestBindingMode.auto);
+		restConfiguration().component("undertow").host(host).port(port).bindingMode(RestBindingMode.auto);
 
 		rest("/order")
 				.consumes("application/json").produces("application/json")

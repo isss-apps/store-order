@@ -1,18 +1,7 @@
-spring:
-  main:
-    sources: org.foobarter.isss.order
-
-management:
-  port: 8081
-
-server:
-  port: -1
-
 camel:
   springboot:
     # The Camel context name
     name: ISSSOrder
-    main-run-controller: true
 
 rest:
   host: "localhost"
