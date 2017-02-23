@@ -7,7 +7,13 @@ cache:
   - $HOME/.m2
 
 install:
-  - mvn clean install
+  - mvn -s configuration/settings.xml clean install
+
+script:
+  - mvn -s configuration/settings.xml test
 
 jdk:
   - oraclejdk8
+
+notifications:
+  email: false
