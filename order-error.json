@@ -1,0 +1,14 @@
+{
+  "uuid": "1",
+  "customer": {
+    "name": "ERROR",
+    "address": "Somewhere in the Galaxy"
+  },
+  "items": [
+    {
+      "storeId": 1000,
+      "amount": 2,
+      "itemPrice": "19.99"
+    }
+  ]
+}

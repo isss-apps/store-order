@@ -35,12 +35,22 @@ public class OrderRoute extends RouteBuilder {
 				.put().type(Order.class).outType(OrderReceipt.class)
 					.route()
 						.log("Body: ${body}")
-						.idempotentConsumer(simple("${body.uuid}"),
-							MemoryIdempotentRepository.memoryIdempotentRepository(1024))
-							.skipDuplicate(false)
-						.log("Processing order ${body.uuid} for ${body.customer.name}, ${body.customer.address}")
-						.process(orderProcessor)
-						.log("Receipt for ${body.price}: ${body.message}");
+
+						.choice() // simulated infinite delay
+							.when(body().method("getCustomer").method("getName").isEqualToIgnoreCase("error"))
+							.to("direct:timeout")
+								.endChoice()
+							.otherwise()
+								.idempotentConsumer(simple("${body.uuid}"),
+									MemoryIdempotentRepository.memoryIdempotentRepository(1024))
+									.skipDuplicate(false)
+								.log("Processing order ${body.uuid} for ${body.customer.name}, ${body.customer.address}")
+								.process(orderProcessor)
+								.log("Receipt for ${body.price}: ${body.message}");
+
+		from("direct:timeout")
+				.delay(5 * 60_000).asyncDelayed()
+				.setHeader("CamelHttpResponseCode", simple("503"));
 
 	}
 }
