@@ -29,6 +29,8 @@ public class OrderRoute extends RouteBuilder {
     public void configure() throws Exception {
 		restConfiguration().component("undertow").host(host).port(port).bindingMode(RestBindingMode.auto);
 
+		getContext().getShutdownStrategy().setTimeout(10);
+
 		rest("/order")
 				.consumes("application/json").produces("application/json")
 
@@ -49,7 +51,7 @@ public class OrderRoute extends RouteBuilder {
 								.log("Receipt for ${body.price}: ${body.message}");
 
 		from("direct:timeout")
-				.delay(5 * 60_000).asyncDelayed()
+				.delay(60_000).asyncDelayed()
 				.setHeader("CamelHttpResponseCode", simple("503"));
 
 	}
